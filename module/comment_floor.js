@@ -1,7 +1,4 @@
-// 热门评论
-
 module.exports = (query, request) => {
-  query.cookie.os = 'pc'
   query.type = {
     0: 'R_SO_4_', //  歌曲
     1: 'R_MV_5_', //  MV
@@ -11,14 +8,14 @@ module.exports = (query, request) => {
     5: 'R_VI_62_', //  视频
   }[query.type]
   const data = {
-    rid: query.id,
+    parentCommentId: query.parentCommentId,
+    threadId: query.type + query.id,
+    time: query.time || -1,
     limit: query.limit || 20,
-    offset: query.offset || 0,
-    beforeTime: query.before || 0,
   }
   return request(
     'POST',
-    `https://music.163.com/weapi/v1/resource/hotcomments/${query.type}${query.id}`,
+    `https://music.163.com/api/resource/comment/floor/get`,
     data,
     {
       crypto: 'weapi',
